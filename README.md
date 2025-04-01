@@ -1,12 +1,15 @@
 # Entra ID Authentication for Django
 
-Fork of the excellent `django-auth-adfs` package, with additional functionality.
+> **Attribution**: This project is a fork of [django-auth-adfs](https://github.com/snok/django-auth-adfs) created by Joris Beckers and maintained by [Snok](https://github.com/snok).
 
+[![docs](https://github.com/tnware/django-entra-auth/actions/workflows/docs_deploy.yml/badge.svg)](https://github.com/tnware/django-entra-auth/actions/workflows/docs_deploy.yml)
 [![PyPI version](https://img.shields.io/pypi/v/django-entra-auth.svg)](https://pypi.python.org/pypi/django-entra-auth)
 [![Python versions](https://img.shields.io/pypi/pyversions/django-entra-auth.svg)](https://pypi.python.org/pypi/django-entra-auth#downloads)
 [![Django versions](https://img.shields.io/pypi/djversions/django-entra-auth.svg)](https://pypi.python.org/pypi/django-entra-auth)
+[![License](https://img.shields.io/pypi/l/django-entra-auth.svg)](https://github.com/tnware/django-entra-auth/blob/main/LICENSE)
+[![Tests](https://github.com/tnware/django-entra-auth/actions/workflows/testing.yml/badge.svg)](https://github.com/tnware/django-entra-auth/actions/workflows/testing.yml)
 
-A Django authentication backend for Microsoft Entra ID (formerly Azure AD) and ADFS. This is a fork of `django-auth-adfs`.
+A Django authentication backend for Microsoft Entra ID (formerly Azure AD). This project extends the foundation established by `django-auth-adfs` with specialized focus on Entra ID and Graph API integration.
 
 *   Free software: BSD License
 *   Homepage: https://github.com/tnware/django-entra-auth
@@ -14,11 +17,14 @@ A Django authentication backend for Microsoft Entra ID (formerly Azure AD) and A
 
 ## Features
 
-*   Integrates Django with Microsoft Entra ID (Azure AD) or Active Directory Federation Services (ADFS).
-*   Provides seamless single sign on (SSO) for your Django project.
-*   Auto creates users and adds them to Django groups based on info received from the identity provider.
-*   Includes `TokenLifecycleMiddleware` to manage Access, Refresh, and On-Behalf-Of (OBO) tokens in the user session, enabling delegated API access (e.g., Microsoft Graph). See [Token Lifecycle docs](docs/token_lifecycle.md) for details. (Note: Link might need adjustment)
-*   Django Rest Framework (DRF) integration: Authenticate against your API with an access token.
+*   Integrates Django with Microsoft Entra ID (formerly Azure AD)
+*   Provides seamless single sign on (SSO) for your Django project
+*   Auto creates users and adds them to Django groups based on info received from Entra ID
+*   **Token Lifecycle Management** (new): Automatically handles storing, refreshing, and encrypting access/refresh tokens
+*   **On-Behalf-Of Token Support** (new): Simplifies access to Microsoft Graph API and other delegated access scenarios
+*   Django Rest Framework (DRF) integration: Authenticate against your API with an Entra ID access token
+
+While building on the original django-auth-adfs, we've focused specifically on the Entra ID authentication scenario with enhancements for token management, storing them so that your application can securely and seamlessly delegate access to Graph API on behalf of your users.
 
 ## Installation
 
