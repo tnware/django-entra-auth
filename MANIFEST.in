@@ -1,0 +1,11 @@
+include CONTRIBUTING.rst
+include README.md
+
+recursive-include tests *
+recursive-exclude * __pycache__
+recursive-exclude * *.py[co]
+
+recursive-include django_entra_auth/templates *.html
+recursive-include docs *.rst conf.py Makefile make.bat
+recursive-include docs/_static *
+recursive-include docs/_templates *
