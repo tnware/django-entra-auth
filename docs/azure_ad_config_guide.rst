@@ -1,17 +1,17 @@
-Azure AD
-========
+Microsoft Entra ID
+================
 
-Getting this module to work is sometimes not so straightforward. If you're not familiar with JWT tokens or Azure AD
+Getting this module to work is sometimes not so straightforward. If you're not familiar with JWT tokens or Microsoft Entra ID
 itself, it might take some tries to get all the settings right.
 
-This guide tries to give a basic overview of how to configure Azure AD and how to determine the settings for
-django-entra-auth. Installing and configuring the basics of Azure AD is not explained here.
+This guide tries to give a basic overview of how to configure Microsoft Entra ID and how to determine the settings for
+django-entra-auth. Installing and configuring the basics of Entra ID is not explained here.
 
 
 Step 1 - Register a backend application
 ---------------------------------------
 
-After signing in to `Azure <https://portal.azure.com>`_. Open the **Azure Active Directory** dashboard.
+After signing in to `Azure Portal <https://portal.azure.com>`_, open the **Microsoft Entra ID** dashboard.
 
 .. image:: _static/AzureAD/01-azure_active_directory.png
    :scale: 50 %
@@ -50,7 +50,7 @@ Here you register your application.
 ------------
 
 
-When done registering, you will be redirected to your applications overview. Here you need to note down your **Client_ID**. This is how your Django project finds the right Azure application.
+When done registering, you will be redirected to your applications overview. Here you need to note down your **Client_ID** (Application ID). This is how your Django project finds the right Entra ID application.
 
 
 .. image:: _static/AzureAD/05-application_overview.png
@@ -77,7 +77,7 @@ Give it a short (display) name. This is only used by you, to help keep track of 
 ------------
 
 
-Copy your secret (value). It will be become hidden after a short time, so be sure to note this quickly.
+Copy your secret (value). It will become hidden after a short time, so be sure to note this quickly.
 
 
 .. image:: _static/AzureAD/08-copy_Secret.png
@@ -89,7 +89,7 @@ Copy your secret (value). It will be become hidden after a short time, so be sur
 
 Step 2 - Configuring settings.py
 --------------------------------
-We need to update the ``settings.py`` to accommodate our registered Azure AD application.
+We need to update the ``settings.py`` to accommodate our registered Entra ID application.
 
 Replace your ENTRA_AUTH with this.
 
@@ -139,7 +139,7 @@ Add this path to your project's ``urls.py`` file.
         ...
     ]
 
-Step 3 - Register and configure an Azure AD frontend application
+Step 3 - Register and configure a frontend application
 ----------------------------------------------------------------
 Just like we did with our backend application in step 1, we have to register a new app for our frontend. In this example we are authenticating a Django Rest Framework token through a single page application(SPA). The redirect URI value must match with the domain where your frontend application is located(eg. http://localhost:3000).
 
@@ -151,7 +151,7 @@ Just like we did with our backend application in step 1, we have to register a n
 
 ------------
 
-Copy your frontend's client ID, you will need later
+Copy your frontend's client ID, you will need it later
 
 
 

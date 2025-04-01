@@ -1,8 +1,14 @@
 Token Lifecycle Middleware
 ==========================
 
+.. note::
+   The Token Lifecycle system is an extension to the core functionality provided by the original
+   `django-auth-adfs <https://github.com/snok/django-auth-adfs>`_ project. While building on the foundational
+   authentication capabilities created by Joris Beckers and contributors, this feature adds specialized
+   token management for Microsoft Entra ID and Graph API integration.
+
 Traditionally, django-entra-auth is used **exclusively** as an authentication solution - it handles user authentication
-via ADFS/Azure AD and maps claims to Django users. It doesn't really care about the access tokens from Azure/ADFS after you've been authenticated.
+via Microsoft Entra ID and maps claims to Django users. It doesn't really care about the access tokens after you've been authenticated.
 
 The Token Lifecycle system extends django-entra-auth beyond pure authentication to also handle the complete lifecycle of access tokens
 after the authentication process. This creates a more integrated approach where:
@@ -15,11 +21,11 @@ after the authentication process. This creates a more integrated approach where:
 How it works
 ------------
 
-The token lifecycle system relies on the interplay between the ``TokenLifecycleMiddleware`` and the authentication backend (``AdfsBaseBackend``):
+The token lifecycle system relies on the interplay between the ``TokenLifecycleMiddleware`` and the authentication backend:
 
-1.  **Token Storage**: During authentication, if the ``TokenLifecycleMiddleware`` is enabled, the ``AdfsBaseBackend`` automatically stores and encrypts the access and refresh tokens in the user's session. If configured (``STORE_OBO_TOKEN=True``), it also attempts to acquire and store an OBO token.
+1.  **Token Storage**: During authentication, if the ``TokenLifecycleMiddleware`` is enabled, the backend automatically stores and encrypts the access and refresh tokens in the user's session. If configured (``STORE_OBO_TOKEN=True``), it also attempts to acquire and store an OBO token.
 2.  **Token Monitoring**: On each request for an authenticated user, the ``TokenLifecycleMiddleware`` triggers the backend to check the expiration status of the stored access token (and OBO token, if applicable).
-3.  **Token Refresh**: If the backend determines a token is nearing expiration (based on ``TOKEN_REFRESH_THRESHOLD``), it uses the stored refresh token to attempt to acquire new tokens from the identity provider.
+3.  **Token Refresh**: If the backend determines a token is nearing expiration (based on ``TOKEN_REFRESH_THRESHOLD``), it uses the stored refresh token to attempt to acquire new tokens from Entra ID.
 4.  **OBO Token Management**: The backend handles the acquisition and refresh of OBO tokens alongside the primary access/refresh tokens, if enabled.
 5.  **Session Update**: If tokens are successfully refreshed, the backend updates the encrypted tokens stored in the session.
 6.  **Security Controls**: The backend can be configured (``LOGOUT_ON_TOKEN_REFRESH_FAILURE=True``) to log out the user if token refresh fails. The middleware itself primarily initiates the checks.
@@ -94,7 +100,7 @@ Considerations
 - By default, the system will not log the user out if token refresh fails, but this behavior can be changed with the ``LOGOUT_ON_TOKEN_REFRESH_FAILURE`` setting
 - The system will not store tokens in the session when using the ``signed_cookies`` session backend
 - OBO token storage is enabled by default but can be disabled with the ``STORE_OBO_TOKEN`` setting
-- Using the OBO token versus the regular access token is dependent on the resources you are accessing and the permissions granted to your ADFS/Azure AD application. See `the token types section <#understanding-access-tokens-vs-obo-tokens>`_ for more details.
+- Using the OBO token versus the regular access token is dependent on the resources you are accessing and the permissions granted to your Entra ID application. See `the token types section <#understanding-access-tokens-vs-obo-tokens>`_ for more details.
 
 **Token Refresh Failures**
 
@@ -118,12 +124,12 @@ The best approach is to ensure that all users re-authenticate after the system i
 Azure AD Application Configuration
 ----------------------------------
 
-When using the Token Lifecycle system, your Azure AD application registration needs additional permissions
-beyond those required for simple authentication. This extends the standard authentication-only setup described in the :doc:`azure_ad_config_guide` with additional
+When using the Token Lifecycle system, your Microsoft Entra ID application registration needs additional permissions
+beyond those required for simple authentication. This extends the standard authentication-only setup with additional
 API permissions needed for delegated access.
 
 .. important::
-    Your Django application's session cookie age must be set to a value that is less than that of your ADFS/Azure AD application's refresh token lifetime.
+    Your Django application's session cookie age must be set to a value that is less than that of your Entra ID application's refresh token lifetime.
 
     If a user's refresh token has expired, the user will be required to re-authenticate to continue making delegated requests.
 
@@ -182,7 +188,7 @@ The backend automatically handles encryption/decryption of tokens, so you don't 
 
 .. warning::
     You should always use the ``request.token_storage`` methods to access tokens rather than accessing them directly from the session.
-    Direct access to ``request.session["ADFS_ACCESS_TOKEN"]`` will give you the encrypted token, not the actual token value.
+    Direct access to the raw token data stored in the session will give you the encrypted token, not the actual token value.
 
 Examples
 ----------------------
@@ -223,10 +229,10 @@ This example demonstrates using the OBO token to access Microsoft Graph API
                 status=500
             )
 
-Using with Custom ADFS-Protected API
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Using with Custom Entra ID-Protected API
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This example shows how to use the OBO token to access a custom API protected by ADFS that supports the OBO flow.
+This example shows how to use the OBO token to access a custom API protected by Entra ID that supports the OBO flow.
 
 .. code-block:: python
 
@@ -307,7 +313,7 @@ The following example code demonstrates a debug view to check the values of the 
             return JsonResponse({"authenticated": False})
 
         backend = request.token_storage if hasattr(request, "token_storage") else AdfsBaseBackend()
-        
+
         # Basic session token info
         session_info = {
             "has_access_token": backend.ACCESS_TOKEN_KEY in request.session,
