@@ -346,6 +346,19 @@ must be callable with no arguments to initialize.
 Use cases are storing configuration in database so an administrator can edit
 the configuration in an admin interface.
 
+ENTRA_AUTH_SERVER environment variable
+--------------------------------------
+* **Default**: ``login.microsoftonline.com``
+* **Type**: ``string``
+
+By default, django-entra-auth uses ``login.microsoftonline.com`` as the Entra ID server.
+Set the ``ENTRA_AUTH_SERVER`` environment variable to override this host, for example when
+pointing development or test environments at a mock OpenID Connect server.
+
+.. code-block:: shell
+
+    ENTRA_AUTH_SERVER=mock-server.example.com
+
 .. _tenant_id_setting:
 
 TENANT_ID

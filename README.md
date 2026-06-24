@@ -69,6 +69,9 @@ ENTRA_AUTH = {
     # "LOGOUT_ON_TOKEN_REFRESH_FAILURE"
 }
 
+# Optional: override the Entra ID server host for development/testing.
+# For example: ENTRA_AUTH_SERVER=mock-server.example.com
+
 # Configure django to redirect users to the right URL for login
 LOGIN_URL = "django_entra_auth:login"
 LOGIN_REDIRECT_URL = "/" # Or wherever users should land after login
