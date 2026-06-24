@@ -53,8 +53,6 @@ INSTALLED_APPS = (
 # Basic configuration for Entra ID
 # checkout the documentation for more settings
 ENTRA_AUTH = {
-    # For Entra ID, use 'login.microsoftonline.com/<your-tenant-id>'
-    "SERVER": "login.microsoftonline.com/<your-tenant-id>",
     "CLIENT_ID": "your-application-client-id",
     "RELYING_PARTY_ID": "your-application-client-id", # Often same as CLIENT_ID for Entra ID
     # OIDC Audience ("aud" claim). For Entra ID, LIENT_ID
@@ -68,6 +66,9 @@ ENTRA_AUTH = {
     # "TOKEN_REFRESH_THRESHOLD", "STORE_OBO_TOKEN", "TOKEN_ENCRYPTION_SALT",
     # "LOGOUT_ON_TOKEN_REFRESH_FAILURE"
 }
+
+# Optional: override the Entra ID server host for development/testing.
+# For example: ENTRA_AUTH_SERVER=mock-server.example.com
 
 # Configure django to redirect users to the right URL for login
 LOGIN_URL = "django_entra_auth:login"

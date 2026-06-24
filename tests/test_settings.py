@@ -1,3 +1,4 @@
+import os
 import sys
 from copy import deepcopy
 
@@ -33,6 +34,11 @@ class SettingsTests(TestCase):
             # This should now show a deprecation warning instead of raising ImproperlyConfigured
             config = Settings()
             self.assertEqual(config.SERVER, "login.microsoftonline.com")
+
+    def test_server_can_be_overridden_with_environment_variable(self):
+        with patch.dict(os.environ, {"ENTRA_AUTH_SERVER": "mock-server.example.com"}):
+            config = Settings()
+            self.assertEqual(config.SERVER, "mock-server.example.com")
 
     def test_no_tenant_id(self):
         settings = deepcopy(django_settings)

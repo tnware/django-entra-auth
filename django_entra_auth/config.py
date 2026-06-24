@@ -1,5 +1,6 @@
 import base64
 import logging
+import os
 import warnings
 from datetime import datetime, timedelta
 
@@ -24,6 +25,7 @@ except ImportError:  # Django < 1.10
 logger = logging.getLogger("django_entra_auth")
 
 AZURE_AD_SERVER = "login.microsoftonline.com"
+SERVER_ENVIRONMENT_VARIABLE = "ENTRA_AUTH_SERVER"
 DEFAULT_SETTINGS_CLASS = "django_entra_auth.config.Settings"
 
 
@@ -65,7 +67,7 @@ class Settings(object):
         self.MIRROR_GROUPS = False
         self.RELYING_PARTY_ID = None  # Required
         self.RETRIES = 3
-        self.SERVER = AZURE_AD_SERVER
+        self.SERVER = os.environ.get(SERVER_ENVIRONMENT_VARIABLE, AZURE_AD_SERVER)
         self.TENANT_ID = None  # Required
         self.TIMEOUT = 5
         self.USERNAME_CLAIM = "upn"
