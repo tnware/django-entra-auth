@@ -3,8 +3,10 @@ from copy import deepcopy
 
 from django.core.exceptions import ImproperlyConfigured
 from django.test import TestCase, SimpleTestCase, override_settings
-from mock import patch
+from mock import Mock, patch
+from requests import HTTPError
 from django_entra_auth.config import django_settings
+from django_entra_auth.config import ConfigLoadError
 from django_entra_auth.config import Settings
 from django_entra_auth.config import ProviderConfig
 from .custom_config import Settings as CustomSettings
@@ -30,9 +32,8 @@ class SettingsTests(TestCase):
         settings.ENTRA_AUTH["TENANT_ID"] = "abc"
         settings.ENTRA_AUTH["SERVER"] = "abc"
         with patch("django_entra_auth.config.django_settings", settings):
-            # This should now show a deprecation warning instead of raising ImproperlyConfigured
             config = Settings()
-            self.assertEqual(config.SERVER, "login.microsoftonline.com")
+            self.assertEqual(config.SERVER, "abc")
 
     def test_no_tenant_id(self):
         settings = deepcopy(django_settings)
@@ -48,7 +49,6 @@ class SettingsTests(TestCase):
 
     def test_tenant_with_block_users(self):
         settings = deepcopy(django_settings)
-        # SERVER is no longer needed as it's now fixed to login.microsoftonline.com
         settings.ENTRA_AUTH["TENANT_ID"] = "abc"
         settings.ENTRA_AUTH["BLOCK_GUEST_USERS"] = True
         with patch("django_entra_auth.config.django_settings", settings):
@@ -88,7 +88,6 @@ class SettingsTests(TestCase):
         settings = deepcopy(django_settings)
         current_settings = Settings()
         self.assertEqual(current_settings.VERSION, "v1.0")
-        # SERVER is no longer needed as it's now fixed to login.microsoftonline.com
         settings.ENTRA_AUTH["TENANT_ID"] = "abc"
         settings.ENTRA_AUTH["VERSION"] = "v2.0"
         with patch("django_entra_auth.config.django_settings", settings):
@@ -96,14 +95,33 @@ class SettingsTests(TestCase):
             self.assertEqual(current_settings.VERSION, "v2.0")
 
     def test_version_setting(self):
-        # Renamed from test_not_azure_but_version_is_set since
-        # that test is no longer valid - SERVER is always Azure AD now
         settings = deepcopy(django_settings)
         settings.ENTRA_AUTH["TENANT_ID"] = "abc"
         settings.ENTRA_AUTH["VERSION"] = "v2.0"
         with patch("django_entra_auth.config.django_settings", settings):
             config = Settings()
             self.assertEqual(config.VERSION, "v2.0")
+
+    def test_openid_config_uses_configured_server(self):
+        settings = Settings()
+        settings.CLIENT_ID = "client"
+        settings.SERVER = "login.microsoftonline.us"
+        settings.TENANT_ID = "tenant"
+
+        with patch("django_entra_auth.config.settings", settings):
+            provider_config = ProviderConfig()
+
+            response = Mock()
+            response.raise_for_status.side_effect = HTTPError()
+            provider_config.session.get = Mock(return_value=response)
+
+            with self.assertRaises(ConfigLoadError):
+                provider_config._load_openid_config()
+
+            provider_config.session.get.assert_called_once_with(
+                "https://login.microsoftonline.us/tenant/.well-known/openid-configuration?appid=client",
+                timeout=settings.TIMEOUT,
+            )
 
     def test_configured_proxy(self):
         settings = Settings()

@@ -76,7 +76,6 @@ class RestFrameworkIntegrationTests(TestCase):
         from django_entra_auth.config import django_settings
 
         settings = deepcopy(django_settings)
-        # SERVER is no longer needed as it's now fixed to login.microsoftonline.com
         settings.ENTRA_AUTH["TENANT_ID"] = "dummy_tenant_id"
         with patch("django_entra_auth.config.django_settings", settings):
             with patch("django_entra_auth.config.settings", Settings()):
@@ -94,7 +93,6 @@ class RestFrameworkIntegrationTests(TestCase):
         from django_entra_auth.config import django_settings
 
         settings = deepcopy(django_settings)
-        # SERVER is no longer needed as it's now fixed to login.microsoftonline.com
         settings.ENTRA_AUTH["TENANT_ID"] = "dummy_tenant_id"
         settings.ENTRA_AUTH["BLOCK_GUEST_USERS"] = True
         with patch("django_entra_auth.config.django_settings", settings):
@@ -114,7 +112,6 @@ class RestFrameworkIntegrationTests(TestCase):
         from django_entra_auth.config import django_settings
 
         settings = deepcopy(django_settings)
-        # SERVER is no longer needed as it's now fixed to login.microsoftonline.com
         settings.ENTRA_AUTH["TENANT_ID"] = "dummy_tenant_id"
         settings.ENTRA_AUTH["BLOCK_GUEST_USERS"] = True
         with patch("django_entra_auth.config.django_settings", settings):
@@ -133,7 +130,6 @@ class RestFrameworkIntegrationTests(TestCase):
         from django_entra_auth.config import django_settings
 
         settings = deepcopy(django_settings)
-        # SERVER is no longer needed as it's now fixed to login.microsoftonline.com
         settings.ENTRA_AUTH["TENANT_ID"] = "dummy_tenant_id"
         settings.ENTRA_AUTH["GUEST_USERNAME_CLAIM"] = "email"
         settings.ENTRA_AUTH["BLOCK_GUEST_USERS"] = False
@@ -153,7 +149,6 @@ class RestFrameworkIntegrationTests(TestCase):
         from django_entra_auth.config import django_settings
 
         settings = deepcopy(django_settings)
-        # SERVER is no longer needed as it's now fixed to login.microsoftonline.com
         settings.ENTRA_AUTH["TENANT_ID"] = "dummy_tenant_id"
         settings.ENTRA_AUTH["GUEST_USERNAME_CLAIM"] = "email"
         settings.ENTRA_AUTH["BLOCK_GUEST_USERS"] = False
@@ -173,7 +168,6 @@ class RestFrameworkIntegrationTests(TestCase):
         from django_entra_auth.config import django_settings
 
         settings = deepcopy(django_settings)
-        # SERVER is no longer needed as it's now fixed to login.microsoftonline.com
         settings.ENTRA_AUTH["TENANT_ID"] = "dummy_tenant_id"
         settings.ENTRA_AUTH["GUEST_USERNAME_CLAIM"] = (
             None  # <--- Set to None, should not be validated as OK
@@ -198,7 +192,6 @@ class RestFrameworkIntegrationTests(TestCase):
         from django_entra_auth.config import django_settings
 
         settings = deepcopy(django_settings)
-        # SERVER is no longer needed as it's now fixed to login.microsoftonline.com
         settings.ENTRA_AUTH["TENANT_ID"] = "dummy_tenant_id"
         with patch("django_entra_auth.config.django_settings", settings):
             with patch("django_entra_auth.backend.settings", Settings()):
@@ -221,7 +214,6 @@ class RestFrameworkIntegrationTests(TestCase):
         from django_entra_auth.config import django_settings
 
         settings = deepcopy(django_settings)
-        # SERVER is no longer needed as it's now fixed to login.microsoftonline.com
         settings.ENTRA_AUTH["TENANT_ID"] = "dummy_tenant_id"
         with patch("django_entra_auth.config.django_settings", settings):
             with patch("django_entra_auth.backend.settings", Settings()):
@@ -242,7 +234,6 @@ class RestFrameworkIntegrationTests(TestCase):
         from django_entra_auth.config import django_settings
 
         settings = deepcopy(django_settings)
-        # SERVER is no longer needed as it's now fixed to login.microsoftonline.com
         settings.ENTRA_AUTH["TENANT_ID"] = "dummy_tenant_id"
         settings.ENTRA_AUTH["VERSION"] = "v2.0"
         with patch("django_entra_auth.config.django_settings", settings):
@@ -266,7 +257,6 @@ class RestFrameworkIntegrationTests(TestCase):
         from django_entra_auth.config import django_settings
 
         settings = deepcopy(django_settings)
-        # SERVER is no longer needed as it's now fixed to login.microsoftonline.com
         settings.ENTRA_AUTH["TENANT_ID"] = "dummy_tenant_id"
         with patch("django_entra_auth.config.django_settings", settings):
             with patch("django_entra_auth.backend.settings", Settings()):

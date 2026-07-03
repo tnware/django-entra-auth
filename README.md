@@ -53,11 +53,13 @@ INSTALLED_APPS = (
 # Basic configuration for Entra ID
 # checkout the documentation for more settings
 ENTRA_AUTH = {
-    # For Entra ID, use 'login.microsoftonline.com/<your-tenant-id>'
-    "SERVER": "login.microsoftonline.com/<your-tenant-id>",
+    # Optional. Defaults to "login.microsoftonline.com".
+    # Override for national clouds or compatible Entra ID hosts.
+    "SERVER": "login.microsoftonline.com",
+    "TENANT_ID": "your-tenant-id",
     "CLIENT_ID": "your-application-client-id",
     "RELYING_PARTY_ID": "your-application-client-id", # Often same as CLIENT_ID for Entra ID
-    # OIDC Audience ("aud" claim). For Entra ID, LIENT_ID
+    # OIDC Audience ("aud" claim). For Entra ID, CLIENT_ID
     "AUDIENCE": "your-application-client-id",
     # Set to False for Entra ID. Provide path for ADFS.
     "CA_BUNDLE": False,
