@@ -1,6 +1,6 @@
 [project]
 name = "django-entra-auth"
-version = "1.16.0"
+version = "1.16.1"
 description = "A Django authentication backend for Microsoft Entra ID"
 authors = [{ name = "Tyler Woods", email = "tyler@tylermade.net" }]
 requires-python = ">=3.9"
