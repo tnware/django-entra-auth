@@ -346,6 +346,26 @@ must be callable with no arguments to initialize.
 Use cases are storing configuration in database so an administrator can edit
 the configuration in an admin interface.
 
+SERVER
+------
+* **Default**: ``login.microsoftonline.com``
+* **Type**: ``string``
+
+The Entra ID host used to load OpenID Connect configuration.
+
+Override this when using a national cloud or another compatible Entra ID host.
+Do not include the URL scheme or tenant ID; ``TENANT_ID`` is configured separately
+and is added to the discovery URL by django-entra-auth.
+
+Example:
+
+.. code-block:: python
+
+    ENTRA_AUTH = {
+        "SERVER": "login.microsoftonline.us",
+        "TENANT_ID": "your-tenant-id",
+    }
+
 .. _tenant_id_setting:
 
 TENANT_ID

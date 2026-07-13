@@ -146,13 +146,6 @@ class Settings(object):
             _settings["RELYING_PARTY_ID"] = _settings["RESOURCE"]
             del _settings["RESOURCE"]
 
-        if "SERVER" in _settings:
-            warnings.warn(
-                "Setting SERVER is not required and will be ignored. Entra ID server will be used.",
-                DeprecationWarning,
-            )
-            del _settings["SERVER"]
-
         if self.VERSION == "v2.0" and not self.SCOPES and self.RELYING_PARTY_ID:
             warnings.warn(
                 "Use `SCOPES` for AzureAD instead of RELYING_PARTY_ID",
